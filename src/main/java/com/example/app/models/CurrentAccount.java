@@ -27,7 +27,7 @@ public class CurrentAccount {
 	private double saldo;
 	private String usuario;
 	private String clave;
-	//
+	private String codigo_bancario;
 
 }
 

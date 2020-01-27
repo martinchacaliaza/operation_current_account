@@ -101,8 +101,9 @@ public class OperacionControllers {
 	
 	//Muestra todos los movimientos bancarios por cliente y numero tarjeta(cuenta de ahorros)
 	@GetMapping("/MovimientosBancarios/{dni}/{numTarjeta}")
-	public Flux<OperationCurrentAccount> movimientosBancarios(@PathVariable String dni, @PathVariable String numTarjeta) {
-		Flux<OperationCurrentAccount> oper = productoService.consultaMovimientos(dni, numTarjeta);
+	public Flux<OperationCurrentAccount> movimientosBancarios(@PathVariable String dni, @PathVariable String numTarjeta,  
+			@PathVariable String codigo_bancario) {
+		Flux<OperationCurrentAccount> oper = productoService.consultaMovimientos(dni, numTarjeta, codigo_bancario);
 		return oper;
 	}
 	

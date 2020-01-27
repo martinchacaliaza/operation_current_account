@@ -1,5 +1,6 @@
 package com.example.app.impl;
 
+import java.nio.charset.CodingErrorAction;
 import java.util.Date;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class OperacionServiceImpl implements OperacionService {
 	public Mono<OperationCurrentAccount> saveOperacionCuentaCuenta(OperationCurrentAccount operacion) {
 		Mono<CurrentAccount> oper1 = WebClient.builder().baseUrl("http://"+ valorget +"/producto_bancario/api/ProductoBancario/")
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).build().get()
-				.uri("/numero_cuenta/" + operacion.getCuenta_origen()).retrieve().bodyToMono(CurrentAccount.class).log();
+				.uri("/numero_cuenta/" + operacion.getCuenta_origen()+"/"+operacion.getCodigo_bancario_destino()).retrieve().bodyToMono(CurrentAccount.class).log();
 
 		return oper1.flatMap(c1 -> {
 			if (c1.getTipoProducto().getIdTipo().equalsIgnoreCase("1")) {
@@ -94,8 +95,10 @@ public class OperacionServiceImpl implements OperacionService {
 							"Ya no puede realizar retiros, debe tener un monton minimo" + " de S/.20 en su cuenta.");
 				}
 			}
-			Mono<Long> valor = productoDao.consultaMovimientos(operacion.getDni(), operacion.getCuenta_origen())
-					.count();
+			
+			Mono<Long> valor = productoDao.consultaMovimientos(operacion.getDni(), operacion.getCuenta_origen(), 
+					c1.getCodigo_bancario()).count();
+			
 			return valor.flatMap(p -> {
 				// NUMERO DE COMISIONES
 				if (p > 3) {
@@ -104,7 +107,7 @@ public class OperacionServiceImpl implements OperacionService {
 				Mono<CurrentAccount> oper2 = WebClient.builder().baseUrl("http://"+ valorget +"/producto_bancario/api/ProductoBancario/")
 						.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).build()
 						.put().uri("/retiro/" + operacion.getCuenta_origen() + "/" + operacion.getMontoPago() + "/"
-								+ operacion.getComision()).retrieve().bodyToMono(CurrentAccount.class).log();
+								+ operacion.getComision()+"/"+operacion.getCodigo_bancario_destino()).retrieve().bodyToMono(CurrentAccount.class).log();
 
 				return oper2.flatMap(c -> {
 
@@ -114,7 +117,8 @@ public class OperacionServiceImpl implements OperacionService {
 
 				Mono<CurrentAccount> oper3 = WebClient.builder().baseUrl("http://"+ valorget +"/productos_creditos/api/ProductoCredito/")
 						.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).build()
-						.put().uri("/pago/" + operacion.getCuenta_destino() + "/" + operacion.getMontoPago())
+						.put().uri("/pago/" + operacion.getCuenta_destino() + "/" + operacion.getMontoPago()
+						+"/"+operacion.getCodigo_bancario_destino())
 						.retrieve().bodyToMono(CurrentAccount.class).log();
 				
 				return oper3.flatMap(d -> {
@@ -140,7 +144,7 @@ public class OperacionServiceImpl implements OperacionService {
 	public Mono<OperationCurrentAccount> saveOperacionRetiro(OperationCurrentAccount operacion) {
 		Mono<CurrentAccount> oper1 = WebClient.builder().baseUrl("http://"+valorget+"/producto_bancario/api/ProductoBancario/")
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).build().get()
-				.uri("/numero_cuenta/" + operacion.getCuenta_origen()).retrieve().bodyToMono(CurrentAccount.class).log();
+				.uri("/numero_cuenta/" + operacion.getCuenta_origen()+"/"+operacion.getCodigo_bancario_destino()).retrieve().bodyToMono(CurrentAccount.class).log();
 
 		return oper1.flatMap(c1 -> {
 			if (c1.getTipoProducto().getIdTipo().equalsIgnoreCase("1")) {
@@ -167,8 +171,8 @@ public class OperacionServiceImpl implements OperacionService {
 							"Ya no puede realizar retiros, debe tener un monton minimo" + " de S/.20 en su cuenta.");
 				}
 			}
-			Mono<Long> valor = productoDao.consultaMovimientos(operacion.getDni(), operacion.getCuenta_origen())
-					.count();
+			Mono<Long> valor = productoDao.consultaMovimientos(operacion.getDni(), operacion.getCuenta_origen(),
+					c1.getCodigo_bancario()).count();
 			return valor.flatMap(p -> {
 				// NUMERO DE COMISIONES
 				if (p > 3) {
@@ -177,7 +181,7 @@ public class OperacionServiceImpl implements OperacionService {
 				Mono<CurrentAccount> oper2 = WebClient.builder().baseUrl("http://"+ valorget +"/producto_bancario/api/ProductoBancario/")
 						.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).build().put()
 						.uri("/retiro/" + operacion.getCuenta_origen() + "/" + operacion.getMontoPago() + "/"
-								+ operacion.getComision())
+								+ operacion.getComision() + "/"+operacion.getCodigo_bancario_destino())
 						.retrieve().bodyToMono(CurrentAccount.class).log();
 				return oper2.flatMap(c -> {
 
@@ -201,7 +205,7 @@ public class OperacionServiceImpl implements OperacionService {
 	public Mono<OperationCurrentAccount> saveOperacionDeposito(OperationCurrentAccount operacion) {
 		Mono<CurrentAccount> oper1 = WebClient.builder().baseUrl("http://" + valorget +"/producto_bancario/api/ProductoBancario/")
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).build().get()
-				.uri("/numero_cuenta/" + operacion.getCuenta_origen()).retrieve().bodyToMono(CurrentAccount.class).log();
+				.uri("/numero_cuenta/" + operacion.getCuenta_origen()+"/"+operacion.getCodigo_bancario_destino()).retrieve().bodyToMono(CurrentAccount.class).log();
 		return oper1.flatMap(c1 -> {
 			if (c1.getTipoProducto().getIdTipo().equalsIgnoreCase("1")) {
 				comision = 2.5;
@@ -212,7 +216,7 @@ public class OperacionServiceImpl implements OperacionService {
 			} else if (c1.getTipoProducto().getIdTipo().equalsIgnoreCase("3")) {
 				comision = 4.5;
 			}
-			Mono<Long> valor = productoDao.consultaMovimientos(operacion.getDni(), operacion.getCuenta_origen())
+			Mono<Long> valor = productoDao.consultaMovimientos(operacion.getDni(), operacion.getCuenta_origen(), c1.getCodigo_bancario())
 					.count();
 			return valor.flatMap(p -> {
 				if (p > 3) {
@@ -221,7 +225,8 @@ public class OperacionServiceImpl implements OperacionService {
 				Mono<CurrentAccount> oper = WebClient.builder().baseUrl("http://"+ valorget +"/producto_bancario/api/ProductoBancario/")
 						.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).build().put()
 						.uri("/deposito/" + operacion.getCuenta_origen() + "/" + operacion.getMontoPago() + "/"
-								+ operacion.getComision())
+								+ operacion.getComision()+"/"+operacion.getCodigo_bancario_destino())
+						
 						.retrieve().bodyToMono(CurrentAccount.class).log();
 				return oper.flatMap(c -> {
 					if (c.getNumero_cuenta() == null) {
@@ -252,9 +257,9 @@ public class OperacionServiceImpl implements OperacionService {
 	}
 
 	@Override
-	public Flux<OperationCurrentAccount> consultaMovimientos(String dni, String numTarjeta) {
+	public Flux<OperationCurrentAccount> consultaMovimientos(String dni, String numTarjeta, String codigo_bancario) {
 
-		return productoDao.consultaMovimientos(dni, numTarjeta);
+		return productoDao.consultaMovimientos(dni, numTarjeta,codigo_bancario);
 	}
 	
 	@Override

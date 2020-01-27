@@ -26,6 +26,9 @@ public class OperationCurrentAccount {
 	private String cuenta_origen;
 	@NotEmpty
 	private String cuenta_destino;
+	@NotEmpty
+	private String codigo_bancario_destino;
+	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaOperacion;
 	@NotEmpty
