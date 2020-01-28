@@ -77,11 +77,18 @@ public class OperacionControllers {
 	}
 	
 	
-	@PostMapping("/cuenta_a_cuenta")
-	public Mono<OperationCurrentAccount> saveOperacionCuentaCuenta(@RequestBody OperationCurrentAccount producto) {
+	@PostMapping("/cuenta_a_credito")
+	public Mono<OperationCurrentAccount> saveOperacionCuentaCuenta(@RequestBody OperationCurrentAccount oper) {
 		//System.out.println(producto.toString());
-		return productoService.saveOperacionCuentaCuenta(producto);
+		return productoService.saveOperacionPagoCredito(oper);
 	}
+	
+	@PostMapping("/cuenta_a_cuenta")
+	public Mono<OperationCurrentAccount> saveOperacionPagoCredito(@RequestBody OperationCurrentAccount oper) {
+		//System.out.println(producto.toString());
+		return productoService.saveOperacionCuentaCuenta(oper);
+	}
+	
 	
 	
 	/*Guarda o Crea una tarjeta bancaria(tipo: ahorro, plazo fijo ....) 

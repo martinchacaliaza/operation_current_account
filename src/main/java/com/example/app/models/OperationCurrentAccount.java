@@ -23,12 +23,13 @@ public class OperationCurrentAccount {
 	@NotEmpty
 	private String dni;
 	@NotEmpty
+	private String codigo_bancario_origen;
+	@NotEmpty
 	private String cuenta_origen;
 	@NotEmpty
-	private String cuenta_destino;
-	@NotEmpty
 	private String codigo_bancario_destino;
-	
+	@NotEmpty
+	private String cuenta_destino;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaOperacion;
 	@NotEmpty

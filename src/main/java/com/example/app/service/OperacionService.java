@@ -28,7 +28,11 @@ public interface OperacionService {
 
 	Flux<OperationCurrentAccount> consultaMovimientos(String dni, String numeroTarjeta, String codigo_bancario);
 	
-	Mono<OperationCurrentAccount> saveOperacionCuentaCuenta(OperationCurrentAccount operacion);
+	Mono<OperationCurrentAccount> saveOperacionPagoCredito(OperationCurrentAccount operacion);
 
 	Mono<OperationCurrentAccount> consultaComisiones(Date from, Date to);
+	
+	
+	Mono<OperationCurrentAccount> saveOperacionCuentaCuenta(OperationCurrentAccount operacion);
+	
 }
