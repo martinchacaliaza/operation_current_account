@@ -18,7 +18,7 @@ import com.example.app.models.OperationCurrentAccount;
 import com.example.app.service.OperacionService;
 import com.example.app.service.TipoOperacionService;
 
-
+import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -32,7 +32,7 @@ public class OperacionControllers {
 	@Autowired
 	private TipoOperacionService tipoProductoService;
 
-	//Muestra todos las operaciones existentes
+	@ApiOperation(value = "Muestra todos las operaciones de cuentas corrientes existentes", notes="")
 	@GetMapping
 	public Mono<ResponseEntity<Flux<OperationCurrentAccount>>> findAll() {
 		return Mono.just(
@@ -41,7 +41,7 @@ public class OperacionControllers {
 		);
 	}
 
-	//Filtra todas cuentas bancarias por id
+	@ApiOperation(value = "Filtra todas cuentas bancarias por id", notes="")
 	@GetMapping("/{id}")
 	public Mono<ResponseEntity<OperationCurrentAccount>> viewId(@PathVariable String id) {
 		return productoService.findByIdOperacion(id)
@@ -49,64 +49,64 @@ public class OperacionControllers {
 				.defaultIfEmpty(ResponseEntity.notFound().build());
 	}
 
-	//actualiza cuenta bancaria
+
+	@ApiOperation(value = "actualiza cuenta bancaria", notes="")
 	@PutMapping
 	public Mono<OperationCurrentAccount> updateProducto(@RequestBody OperationCurrentAccount producto) {
 		System.out.println(producto.toString());
 		return productoService.saveOperacion(producto);
 	}
 	
-	//Realiza una Transaccion(RETIROS) 
-	//guardando en el microservicio operaciones(movimientos) 
-	// Y Actualiza el saldo de la tarjeta(retiro)
-	//mayor a 4 transacciones ya sea deposito o retiro, se les cobrara un monto de comision por tipo de tarjeta
+
+	//
+	
+	@ApiOperation(value = "Realiza una Transaccion(RETIROS) /guardando en el microservicio operaciones(movimientos) / "
+			+ "Y Actualiza el saldo de la tarjeta(retiro) /mayor a 4 transacciones ya sea deposito o retiro, se les cobrara"
+			+ " un monto de comision por tipo de tarjeta ", notes="")
 	@PostMapping("/retiro")
 	public Mono<OperationCurrentAccount> saveOperacionRetiro(@RequestBody OperationCurrentAccount producto) {
 		//System.out.println(producto.toString());
 		return productoService.saveOperacionRetiro(producto);
 	}
 
-	//Realiza una Transaccion(Deposito) 
-	//guardando en el microservicio operaciones(movimientos) 
-	// Y Actualiza el saldo de la tarjeta(deposito)
-	//mayor a 4 transacciones ya sea deposito o retiro, se les cobrara un monto de comision por tipo de tarjeta
+	@ApiOperation(value = "Realiza una Transaccion(Deposito)"
+			+ "Y Actualiza el saldo de la tarjeta(deposito) "
+			+ " mayor a 4 transacciones ya sea deposito o retiro, se les cobrara un monto de comision por tipo de tarjeta", notes="")
 	@PostMapping("/deposito")
 	public Mono<OperationCurrentAccount> saveOperacionDeposito(@RequestBody OperationCurrentAccount producto) {
 		//System.out.println(producto.toString());
 		return productoService.saveOperacionDeposito(producto);
 	}
 	
-	
+	@ApiOperation(value = "Pago de una cuenta de corriente a una de credito", notes="")
 	@PostMapping("/cuenta_a_credito")
 	public Mono<OperationCurrentAccount> saveOperacionCuentaCuenta(@RequestBody OperationCurrentAccount oper) {
 		//System.out.println(producto.toString());
 		return productoService.saveOperacionPagoCredito(oper);
 	}
 	
+	@ApiOperation(value = "Transferencias de cuenta a cuenta", notes="")
 	@PostMapping("/cuenta_a_cuenta")
 	public Mono<OperationCurrentAccount> saveOperacionPagoCredito(@RequestBody OperationCurrentAccount oper) {
 		//System.out.println(producto.toString());
 		return productoService.saveOperacionCuentaCuenta(oper);
 	}
-	
-	
-	
-	/*Guarda o Crea una tarjeta bancaria(tipo: ahorro, plazo fijo ....) 
-	 * - si el cliente ya tiene cuenta bancaria no debe de registrarlo*/
+		
+	@ApiOperation(value = "Guarda una operacion bancaria", notes="")
 	@PostMapping
 	public Mono<OperationCurrentAccount> guardarProducto(@RequestBody OperationCurrentAccount prod) {
 		return productoService.saveOperacion(prod);
 	}	
 	
-	
-	//Muestra todas los movimientos bancarios por el numero de dni del cliente
+	@ApiOperation(value = "Muestra todas los movimientos bancarios por el numero de dni del cliente", notes="")
 	@GetMapping("/dni/{dni}")
 	public Flux<OperationCurrentAccount> listProductoByDicliente(@PathVariable String dni) {
 		Flux<OperationCurrentAccount> oper = productoService.findAllOperacionByDniCliente(dni);
 		return oper;
 	}
 	
-	//Muestra todos los movimientos bancarios por cliente y numero tarjeta(cuenta de ahorros)
+	@ApiOperation(value = "Muestra todos los movimientos bancarios por cliente y "
+			+ " numero tarjeta(cuenta de ahorros)", notes="")
 	@GetMapping("/MovimientosBancarios/{dni}/{numTarjeta}")
 	public Flux<OperationCurrentAccount> movimientosBancarios(@PathVariable String dni, @PathVariable String numTarjeta,  
 			@PathVariable String codigo_bancario) {
@@ -114,10 +114,9 @@ public class OperacionControllers {
 		return oper;
 	}
 	
-	//Reporte de movimientos con comisiones por periodo de tiempo 
+	@ApiOperation(value = "Reporte de movimientos con comisiones por periodo de tiempo", notes="")
 	@GetMapping("consultaRangoFecha/{fecha1}")
 	public Mono<ResponseEntity<OperationCurrentAccount>> consultaMovimientosComisiones(@PathVariable String fecha1) throws ParseException{
-
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z");
 			String f1 = fecha1.split("&&")[0]+" 00:00:00.000 +0000";
 			Date from = format.parse(f1);
@@ -128,8 +127,6 @@ public class OperacionControllers {
 					.body(p))
 					.defaultIfEmpty(ResponseEntity.notFound().build());
 		}
-	
-		
 }
 
 
