@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.example.app.controllers.WebClientController;
+
 import com.example.app.dao.OperacionDao;
 import com.example.app.models.OperationCurrentAccount;
 import com.example.app.models.CurrentAccount;
@@ -66,11 +66,11 @@ public class OperacionServiceImpl implements OperacionService {
 	
 	@Override
 	public Mono<OperationCurrentAccount> saveOperacionCuentaCuenta(OperationCurrentAccount operacion) {
+	
 		Mono<CurrentAccount> oper1 = WebClient.builder().baseUrl("http://"+ valorget +"/producto_bancario/api/ProductoBancario/")
-				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE).build().get()
+				.defaultHeader(HttpHeaders.CONTENT_TYPE).build().get()
 				.uri("/numero_cuenta/" + operacion.getCuenta_origen()+"/"+operacion.getCodigo_bancario_origen()).
 				retrieve().bodyToMono(CurrentAccount.class).log();
-
 		return oper1.flatMap(c1 -> {
 			if (c1.getTipoProducto().getIdTipo().equalsIgnoreCase("1")) {
 
