@@ -10,6 +10,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -39,7 +41,10 @@ public class OperationCurrentAccount {
 	
 	private Double comision = 0.0;
 		
-	//private tipoProducto tipoCliente;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	public Date fechaOperacion() {
+		return fechaOperacion;
+	}
 }
 
 
