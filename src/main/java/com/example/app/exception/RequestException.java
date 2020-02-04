@@ -1,4 +1,4 @@
-package com.sistema.app.exception;
+package com.example.app.exception;
 
 
 public class RequestException extends RuntimeException {

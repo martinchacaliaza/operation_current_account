@@ -1,4 +1,4 @@
-package com.sistema.app.exception;
+package com.example.app.exception;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
