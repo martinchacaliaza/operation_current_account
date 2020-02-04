@@ -3,9 +3,8 @@ package com.example.app.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
-import com.example.app.dao.TipoOperacionDao;
 import com.example.app.models.TypeOperation;
+import com.example.app.repository.TipoOperacionDao;
 import com.example.app.service.TipoOperacionService;
 
 import reactor.core.publisher.Flux;

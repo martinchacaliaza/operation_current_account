@@ -1,4 +1,4 @@
-package com.example.app.models;
+package com.example.app.dto;
 
 
 
@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TypeCurrentAccount {
+public class dtoTypeCurrentAccount {
 	
 	private String idTipo;
 	private String descripcion;

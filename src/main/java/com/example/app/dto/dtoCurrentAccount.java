@@ -1,4 +1,4 @@
-package com.example.app.models;
+package com.example.app.dto;
 
 import java.util.Date;
 
@@ -18,12 +18,12 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CurrentAccount {
+public class dtoCurrentAccount {
 	
 	private String id;
 	private String dni;
 	private String numero_cuenta;
-	private TypeCurrentAccount tipoProducto;
+	private dtoTypeCurrentAccount tipoProducto;
 	private Date fecha_afiliacion;
 	private String fecha_cierre;
 	private double saldo;

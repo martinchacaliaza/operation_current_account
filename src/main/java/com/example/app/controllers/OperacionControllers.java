@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.app.models.OperationCurrentAccount;
+import com.example.app.dto.dtoPerfilConsolidado;
 import com.example.app.service.OperacionService;
 import com.example.app.service.TipoOperacionService;
 
@@ -127,7 +128,19 @@ public class OperacionControllers {
 					.body(p))
 					.defaultIfEmpty(ResponseEntity.notFound().build());
 		}
+	
+	@ApiOperation(value = "Reporte de perfiles consolidados por cliente", notes="")
+	@GetMapping("/perfilconsolidado/{dni}")
+	public Mono<dtoPerfilConsolidado> perfilConsolidado(@PathVariable String dni) {
+		
+		return productoService.perfilConsolidado(dni);
+	}
+	
+	
 }
+
+
+
 
 
 

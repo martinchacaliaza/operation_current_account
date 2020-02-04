@@ -1,4 +1,4 @@
-package com.example.app.dao;
+package com.example.app.repository;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 

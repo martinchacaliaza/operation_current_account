@@ -38,7 +38,6 @@ public class OperationCurrentAccount {
 	private TypeOperation tipoOperacion;
 	@NotEmpty
 	private double montoPago;
-	
 	private Double comision = 0.0;
 		
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
