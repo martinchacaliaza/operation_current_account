@@ -22,14 +22,14 @@ public class dtoCurrentAccount {
 	
 	private String id;
 	private String dni;
-	private String numero_cuenta;
+	private String numeroCuenta;
 	private dtoTypeCurrentAccount tipoProducto;
 	private Date fecha_afiliacion;
 	private String fecha_cierre;
 	private double saldo;
 	private String usuario;
 	private String clave;
-	private String codigo_bancario;
+	private String codigoBancario;
 
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	public Date fecha_afiliacion() {

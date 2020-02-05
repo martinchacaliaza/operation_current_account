@@ -18,10 +18,11 @@ public interface OperacionService {
 	Mono<OperationCurrentAccount> saveOperacionRetiro(OperationCurrentAccount producto);
 	Mono<OperationCurrentAccount> saveOperacionDeposito(OperationCurrentAccount producto);
 	Flux<OperationCurrentAccount> findAllOperacionByDniCliente(String dni);
-	Flux<OperationCurrentAccount> consultaMovimientos(String dni, String numeroTarjeta, String codigo_bancario);
+	Flux<OperationCurrentAccount> consultaMovimientos(String numeroTarjeta, String codigo_bancario);
 	Mono<OperationCurrentAccount> saveOperacionPagoCredito(OperationCurrentAccount operacion);
-	Mono<OperationCurrentAccount> consultaComisiones(Date from, Date to);
+	Flux<OperationCurrentAccount> consultaComisiones(Date from, Date to);
 	Mono<OperationCurrentAccount> saveOperacionCuentaCuenta(OperationCurrentAccount oper);
 	Mono<dtoPerfilConsolidado> perfilConsolidado(String dni);
+	
 	
 }

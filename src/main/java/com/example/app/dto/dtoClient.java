@@ -22,8 +22,6 @@ public class dtoClient {
 	private String edad;
 	private String correo;
 	private dtoTypeClient tipoCliente;
-	@NotEmpty
-	// @Field(name="codigobancario")
-	private String codigo_bancario;
+	private String codigoBancario;
 
 }

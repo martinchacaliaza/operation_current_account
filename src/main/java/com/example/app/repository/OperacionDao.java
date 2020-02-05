@@ -19,9 +19,8 @@ public interface OperacionDao extends ReactiveMongoRepository<OperationCurrentAc
 
 	Flux<OperationCurrentAccount> findByDni(String dni);
 
-	@Query("{ 'dni' : ?0 , 'cuenta_origen' : ?1, 'codigo_bancario_origen' : ?2 }")
-	Flux<OperationCurrentAccount> consultaMovimientos(String dni, String numTarjeta, String codigo_bancario);
+	Flux<OperationCurrentAccount> findByCuentaOrigenAndCodigoBancarioOrigen(String numTarjeta, String codigo_bancario);
 
-	@Query("{'fechaOperacion' : {'$gt' : ?0, '$lt' : ?1}}")
-	Mono<OperationCurrentAccount> consultaComisiones(Date from, Date to);
+	@Query("{'fechaOperacion' : {'$gt' : ?0, '$lt' : ?1},  $where : 'this.comision > 0.0' }")
+	Flux<OperationCurrentAccount> consultaComisiones(Date from, Date to);
 }

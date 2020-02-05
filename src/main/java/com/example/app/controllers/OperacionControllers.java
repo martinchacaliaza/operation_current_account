@@ -3,7 +3,6 @@ package com.example.app.controllers;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.app.models.OperationCurrentAccount;
 import com.example.app.dto.dtoPerfilConsolidado;
 import com.example.app.service.OperacionService;
-import com.example.app.service.TipoOperacionService;
 
 import io.swagger.annotations.ApiOperation;
 import reactor.core.publisher.Flux;
@@ -30,14 +28,12 @@ public class OperacionControllers {
 	@Autowired
 	private OperacionService productoService;
 
-	@Autowired
-	private TipoOperacionService tipoProductoService;
 
 	@ApiOperation(value = "Muestra todos las operaciones de cuentas corrientes existentes", notes="")
 	@GetMapping
 	public Mono<ResponseEntity<Flux<OperationCurrentAccount>>> findAll() {
 		return Mono.just(
-				ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(productoService.findAllOperacion())
+				ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(productoService.findAllOperacion())
 
 		);
 	}
@@ -46,7 +42,7 @@ public class OperacionControllers {
 	@GetMapping("/{id}")
 	public Mono<ResponseEntity<OperationCurrentAccount>> viewId(@PathVariable String id) {
 		return productoService.findByIdOperacion(id)
-				.map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
+				.map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(p))
 				.defaultIfEmpty(ResponseEntity.notFound().build());
 	}
 
@@ -111,23 +107,22 @@ public class OperacionControllers {
 	@GetMapping("/MovimientosBancarios/{dni}/{numTarjeta}/{codigo_bancario}")
 	public Flux<OperationCurrentAccount> movimientosBancarios(@PathVariable String dni, @PathVariable String numTarjeta,  
 			@PathVariable String codigo_bancario) {
-		Flux<OperationCurrentAccount> oper = productoService.consultaMovimientos(dni, numTarjeta, codigo_bancario);
+		Flux<OperationCurrentAccount> oper = productoService.consultaMovimientos(numTarjeta, codigo_bancario);
 		return oper;
 	}
 	
 	@ApiOperation(value = "Reporte de movimientos con comisiones por periodo de tiempo", notes="")
 	@GetMapping("consultaRangoFecha/{fecha1}")
-	public Mono<ResponseEntity<OperationCurrentAccount>> consultaMovimientosComisiones(@PathVariable String fecha1) throws ParseException{
+	public Flux<OperationCurrentAccount> consultaMovimientosComisiones(@PathVariable String fecha1) throws ParseException{
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS Z");
 			String f1 = fecha1.split("&&")[0]+" 00:00:00.000 +0000";
 			Date from = format.parse(f1);
 			Date to = format.parse(fecha1.split("&&")[1]+" 00:00:00.000 +0000");
 			System.out.println(format.format(from));
-			return productoService.consultaComisiones(from,to).map(p-> ResponseEntity.ok()
-					.contentType(MediaType.APPLICATION_JSON_UTF8)
-					.body(p))
-					.defaultIfEmpty(ResponseEntity.notFound().build());
+			return productoService.consultaComisiones(from,to);
 		}
+	
+	
 	
 	@ApiOperation(value = "Reporte de perfiles consolidados por cliente", notes="")
 	@GetMapping("/perfilconsolidado/{dni}")
